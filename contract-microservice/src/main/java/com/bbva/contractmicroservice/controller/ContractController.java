@@ -1,6 +1,7 @@
 package com.bbva.contractmicroservice.controller;
 
-import com.bbva.contractmicroservice.entity.ContractEntity;
+import com.bbva.contractmicroservice.dto.ContractDTO;
+import com.bbva.contractmicroservice.entity.Contract;
 import com.bbva.contractmicroservice.service.IContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,17 +30,17 @@ public class ContractController {
     @GetMapping("/buscar-contrato/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> buscarContrato(@PathVariable Long id) {
-        ContractEntity contractEntity = contractService.findById(id);
-        if (contractEntity != null) {
-            return ResponseEntity.ok(contractEntity);
+        Contract contract = contractService.findById(id);
+        if (contract != null) {
+            return ResponseEntity.ok(contract);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro el contrato");
     }
 
     @PostMapping("/registrar-contrato")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registrarContrato(@RequestBody ContractEntity contractEntity) {
-        contractService.save(contractEntity);
+    public void registrarContrato(@RequestBody Contract contract) {
+        contractService.save(contract);
     }
 
     @DeleteMapping("/eliminar-contrato/{id}")
@@ -47,5 +48,17 @@ public class ContractController {
     public void eliminarContrato(@PathVariable Long id) {
         contractService.deleteById(id);
     }
+
+    /////////////////////////////////////////////////////////////////////////////////
+    @GetMapping("/create")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<?> createContract(@RequestBody ContractDTO contractDTO) {
+        Contract createdContract = contractService.createContract(contractDTO);
+        if (createdContract != null) {
+            return ResponseEntity.ok(createdContract);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo registrar el contrato");
+    }
+
 }
 

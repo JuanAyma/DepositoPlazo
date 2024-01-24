@@ -1,4 +1,4 @@
-package com.bbva.costumermicroservice.entity;
+package com.bbva.accountmicroservice.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,18 +10,19 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="cliente")
+@Table(name="Cliente")
 @Entity
-public class CustomerEntity {
+public class Customer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCliente;
 
     private String nombre;
     private String apellido;
-    private String celular;
     private String dni;
     private String direccion;
+    private String celular;
     private String correo;
 
 }

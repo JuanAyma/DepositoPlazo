@@ -10,14 +10,13 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="cuenta")
+@Table(name="Moneda")
 @Entity
-public class AccountEntity {
+public class Currency {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idCuenta;
-    private Long idCliente;
-    private String saldo;
-    private String fechaApertura;
-    private String estadoCuenta;
+    private Long idMoneda;
+    private String nombreMoneda;
+    private String simbolo;
 }
