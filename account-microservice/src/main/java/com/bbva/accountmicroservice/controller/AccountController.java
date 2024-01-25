@@ -1,6 +1,5 @@
 package com.bbva.accountmicroservice.controller;
 
-import com.bbva.accountmicroservice.dto.AccountCreateDTO;
 import com.bbva.accountmicroservice.dto.AccountDTO;
 import com.bbva.accountmicroservice.entity.Account;
 import com.bbva.accountmicroservice.service.IAccountService;

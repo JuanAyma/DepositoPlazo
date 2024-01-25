@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="tasa_interes")
+@Table(name="Tasa_interes")
 @Entity
 public class InterestRate {
     @Id

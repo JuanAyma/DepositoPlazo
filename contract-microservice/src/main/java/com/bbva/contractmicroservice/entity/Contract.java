@@ -16,16 +16,21 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="contrato")
+@Table(name="Contrato")
 @Entity
 public class Contract {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idContrato;
+    @Column(name="fechaInicio")
     private LocalDate fechaInicio;
+    @Column(name="fechaVencimiento")
     private LocalDate fechaVencimiento;
+    @Column(name="cuentaOrigen")
     private String cuentaOrigen;
+    @Column(name="cuentaDepositoInte")
     private String cuentaDepositoInte;
+    @Column(name="ganancia")
     private BigDecimal ganancia;
 
     @OneToOne
@@ -39,4 +44,5 @@ public class Contract {
     @OneToOne
     @JoinColumn(name = "idProducto")
     private Product product;
+
 }

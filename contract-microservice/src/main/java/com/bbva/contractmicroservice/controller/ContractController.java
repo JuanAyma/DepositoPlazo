@@ -6,41 +6,44 @@ import com.bbva.contractmicroservice.service.IContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("api/contrato")
 public class ContractController {
+
+    private final IContractService contractService;
     @Autowired
-    private IContractService contractService;
+    public ContractController(IContractService contractService) {
+        this.contractService = contractService;
+    }
 
     @GetMapping("/listar-contratos")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> listarContratos() {
-        List<?> contratos = contractService.findAll();
+        List<ContractDTO> contratos = contractService.findAll();
         if (!contratos.isEmpty()) {
             return ResponseEntity.ok(contratos);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron contratos");
     }
 
-    @GetMapping("/buscar-contrato/{id}")
+    @GetMapping("/ver/{accountId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> buscarContrato(@PathVariable Long id) {
-        Contract contract = contractService.findById(id);
+    public ResponseEntity<?> getContractById(@PathVariable Long accountId) {
+        ContractDTO contract = contractService.findById(accountId);
         if (contract != null) {
             return ResponseEntity.ok(contract);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro el contrato");
     }
 
-    @PostMapping("/registrar-contrato")
+    @PostMapping("/crear")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registrarContrato(@RequestBody Contract contract) {
-        contractService.save(contract);
+    public Contract registrarContrato(@RequestBody ContractDTO contract) {
+        return contractService.save(contract);
     }
 
     @DeleteMapping("/eliminar-contrato/{id}")
@@ -50,15 +53,6 @@ public class ContractController {
     }
 
     /////////////////////////////////////////////////////////////////////////////////
-    @GetMapping("/create")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> createContract(@RequestBody ContractDTO contractDTO) {
-        Contract createdContract = contractService.createContract(contractDTO);
-        if (createdContract != null) {
-            return ResponseEntity.ok(createdContract);
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo registrar el contrato");
-    }
 
 }
 

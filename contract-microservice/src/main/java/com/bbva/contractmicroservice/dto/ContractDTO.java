@@ -1,5 +1,6 @@
 package com.bbva.contractmicroservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,18 +13,17 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)// si no hay getter ni setter
 public class ContractDTO {
+
     private Long idContrato;
-    /*private Long idCuenta;
-    private Long idProducto;*/
     private LocalDate fechaInicio;
     private LocalDate fechaVencimiento;
     private String cuentaOrigen;
     private String cuentaDepositoInte;
     private BigDecimal ganancia;
-    //private Long idInteres;
 
     private AccountDTO account;
-    private ProductoDTO producto;
-    private InterestRateDTO interes;
+    private InterestRateDTO interestRate;
+    private ProductoDTO product;
 }

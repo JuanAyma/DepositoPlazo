@@ -70,3 +70,106 @@ class AccountServiceImplTest {
         assertEquals(account, result);
     }
 }*/
+
+
+/*@Test
+@Order(2)
+void getAccountByIdTest() {
+        Long accountId = 1L;
+        Account account = new Account();
+        account.setId(accountId);
+
+        when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
+        when(accountMapper.toDto(account)).thenReturn(new AccountDTO());
+
+        AccountDTO result = accountService.getAccountById(accountId);
+
+        verify(accountRepository, times(1)).findById(accountId);
+        verify(accountMapper, times(1)).toDto(account);
+
+        assertNotNull(result);
+        }
+
+@Test
+@Order(3)
+void getAllAccountsTest() {
+        List<Account> accounts = new ArrayList<>();
+        Account account = new Account();
+        account.setId(1L);
+        accounts.add(account);
+
+        when(accountRepository.findAll()).thenReturn(accounts);
+        when(accountMapper.toDtoList(accounts)).thenReturn(new ArrayList<>());
+
+        List<AccountDTO> result = accountService.getAllAccounts();
+
+        verify(accountRepository, times(1)).findAll();
+        verify(accountMapper, times(1)).toDtoList(accounts);
+
+        assertNotNull(result);
+        }
+
+@Test
+@Order(4)
+void saveAccountTest() {
+        AccountDTO accountDTO = new AccountDTO();
+        Account account = new Account();
+
+        when(accountMapper.toEntity(accountDTO)).thenReturn(account);
+        when(accountRepository.save(account)).thenReturn(account);
+
+        Account result = accountService.saveAccount(accountDTO);
+
+        verify(accountMapper, times(1)).toEntity(accountDTO);
+        verify(accountRepository, times(1)).save(account);
+
+        assertNotNull(result);
+        }
+
+@Test
+@Order(5)
+void updateAccountTest() {
+        Long accountId = 1L;
+        AccountDTO updatedAccountDTO = new AccountDTO();
+        Account account = new Account();
+
+        when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
+        when(accountRepository.save(account)).thenReturn(account);
+
+        accountService.updateAccount(accountId, updatedAccountDTO);
+
+        verify(accountRepository, times(1)).findById(accountId);
+        verify(accountRepository, times(1)).save(account);
+        }
+
+@Test
+@Order(6)
+void deleteAccountTest() {
+        Long accountId = 1L;
+
+        doNothing().when(accountRepository).deleteById(accountId);
+
+        accountService.deleteAccount(accountId);
+
+        verify(accountRepository, times(1)).deleteById(accountId);
+        }
+
+@Test
+@Order(7)
+void getAccountsByCustomerIdTest() {
+        Long customerId = 1L;
+        List<Account> accounts = new ArrayList<>();
+        Account account = new Account();
+        account.setId(1L);
+        accounts.add(account);
+
+        when(accountRepository.findAccountsByCustomer_IdCliente(customerId)).thenReturn(accounts);
+        when(accountMapper.toDtoList(accounts)).thenReturn(new ArrayList<>());
+
+        List<AccountDTO> result = accountService.getAccountsByCustomerId(customerId);
+
+        verify(accountRepository, times(1)).findAccountsByCustomer_IdCliente(customerId);
+        verify(accountMapper, times(1)).toDtoList(accounts);
+
+        assertNotNull(result);
+        }*/
