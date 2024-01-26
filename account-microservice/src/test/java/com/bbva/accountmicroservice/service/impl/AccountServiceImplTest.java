@@ -1,8 +1,8 @@
-/*
 package com.bbva.accountmicroservice.service.impl;
 
 import com.bbva.accountmicroservice.dto.AccountDTO;
 import com.bbva.accountmicroservice.entity.Account;
+import com.bbva.accountmicroservice.mapper.AccountMapper;
 import com.bbva.accountmicroservice.repository.AccountRepository;
 import com.bbva.accountmicroservice.service.AccountServiceImpl;
 import org.junit.jupiter.api.Order;
@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,96 +26,58 @@ class AccountServiceImplTest {
     @Mock
     AccountRepository accountRepository;
     @Mock
-    CustomerRepository customerRepository;
-    @Mock
-    CurrencyRepository currencyRepository;
+    AccountMapper accountMapper;
     @InjectMocks
     AccountServiceImpl accountService;
 
     @Test
     @Order(1)
-    void createAccount() {
-        // Crear un AccountDTO con datos de prueba
+    void findByIdTest() {
+        // Crear una cuentaDTO de prueba
+        Long accountId1 = 123456789L;
         AccountDTO accountDTO = new AccountDTO();
-        accountDTO.setSaldo(BigDecimal.valueOf(1000));
+        accountDTO.setIdCuenta(accountId1);
+        accountDTO.setSaldo(new BigDecimal(1000));
         accountDTO.setFechaApertura(LocalDate.now());
-        accountDTO.setEstadoCuenta("Activo");
-        accountDTO.setIdCliente(1L);
-        accountDTO.setIdMoneda(1L);
-
-        // Crear objetos de prueba para Customer y Currency
-        Customer customer = new Customer();
-        Currency currency = new Currency();
+        accountDTO.setCustomer(null);
 
         // Crear una cuenta de prueba
+        Long accountId2 = 123456789L;
         Account account = new Account();
-        account.setSaldo(accountDTO.getSaldo());
-        account.setFechaApertura(accountDTO.getFechaApertura());
-        account.setEstadoCuenta(accountDTO.getEstadoCuenta());
-        account.setCustomer(customer);
-        account.setCurrency(currency);
+        account.setIdCuenta(accountId2);
+        account.setSaldo(new BigDecimal(1000));
+        account.setFechaApertura(LocalDate.now());
+        account.setCustomer(null);
 
         // Simulando el comportamiento de un objeto real
-        when(customerRepository.findById(accountDTO.getIdCliente())).thenReturn(Optional.of(customer));
-        when(currencyRepository.findById(accountDTO.getIdMoneda())).thenReturn(Optional.of(currency));
-        when(accountRepository.save(any(Account.class))).thenReturn(account);
+        when(accountRepository.findById(accountId2)).thenReturn(Optional.of(account));
+        when(accountMapper.toDto(account)).thenReturn(accountDTO);
 
         // Llamando al método que se va a probar
-        Account result = accountService.createAccount(accountDTO);
+        AccountDTO result = accountService.getAccountById(accountId1);
 
-        // Verificando que los métodos findById y save fueron llamados
-        verify(customerRepository, times(1)).findById(accountDTO.getIdCliente());
-        verify(currencyRepository, times(1)).findById(accountDTO.getIdMoneda());
-        verify(accountRepository, times(1)).save(any(Account.class));
-
-        // Comparando el resultado esperado con el resultado obtenido
-        assertEquals(account, result);
-    }
-}*/
-
-
-/*@Test
-@Order(2)
-void getAccountByIdTest() {
-        Long accountId = 1L;
-        Account account = new Account();
-        account.setId(accountId);
-
-        when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
-        when(accountMapper.toDto(account)).thenReturn(new AccountDTO());
-
-        AccountDTO result = accountService.getAccountById(accountId);
-
-        verify(accountRepository, times(1)).findById(accountId);
+        // Verificando que el método findById del repositorio fue llamado
+        verify(accountRepository, times(1)).findById(accountId2);
         verify(accountMapper, times(1)).toDto(account);
 
-        assertNotNull(result);
-        }
+        // Comparando el resultado esperado con el resultado obtenido
+        assertEquals(accountDTO, result);
+    }
 
-@Test
-@Order(3)
-void getAllAccountsTest() {
-        List<Account> accounts = new ArrayList<>();
-        Account account = new Account();
-        account.setId(1L);
-        accounts.add(account);
-
-        when(accountRepository.findAll()).thenReturn(accounts);
-        when(accountMapper.toDtoList(accounts)).thenReturn(new ArrayList<>());
-
-        List<AccountDTO> result = accountService.getAllAccounts();
-
-        verify(accountRepository, times(1)).findAll();
-        verify(accountMapper, times(1)).toDtoList(accounts);
-
-        assertNotNull(result);
-        }
-
-@Test
-@Order(4)
-void saveAccountTest() {
+    @Test
+    @Order(2)
+    void saveAccount() {
         AccountDTO accountDTO = new AccountDTO();
+        accountDTO.setIdCuenta(123456789L);
+        accountDTO.setSaldo(new BigDecimal(1000));
+        accountDTO.setFechaApertura(LocalDate.now());
+        accountDTO.setCustomer(null);
+
         Account account = new Account();
+        account.setIdCuenta(123456789L);
+        account.setSaldo(new BigDecimal(1000));
+        account.setFechaApertura(LocalDate.now());
+        account.setCustomer(null);
 
         when(accountMapper.toEntity(accountDTO)).thenReturn(account);
         when(accountRepository.save(account)).thenReturn(account);
@@ -123,53 +87,83 @@ void saveAccountTest() {
         verify(accountMapper, times(1)).toEntity(accountDTO);
         verify(accountRepository, times(1)).save(account);
 
-        assertNotNull(result);
-        }
+        assertEquals(account, result);
+    }
+    @Test
+    @Order(3)
+    void updateAccount() {
+        AccountDTO accountDTO = new AccountDTO();
+        accountDTO.setIdCuenta(123456789L);
+        accountDTO.setSaldo(new BigDecimal(1000));
+        accountDTO.setFechaApertura(LocalDate.now());
+        accountDTO.setCustomer(null);
 
-@Test
-@Order(5)
-void updateAccountTest() {
-        Long accountId = 1L;
-        AccountDTO updatedAccountDTO = new AccountDTO();
         Account account = new Account();
+        account.setIdCuenta(123456789L);
+        account.setSaldo(new BigDecimal(1000));
+        account.setFechaApertura(LocalDate.now());
+        account.setCustomer(null);
 
-        when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
+        when(accountRepository.findById(123456789L)).thenReturn(Optional.of(account));
         when(accountRepository.save(account)).thenReturn(account);
 
-        accountService.updateAccount(accountId, updatedAccountDTO);
+        accountService.updateAccount(123456789L, accountDTO);
 
-        verify(accountRepository, times(1)).findById(accountId);
+        verify(accountRepository, times(1)).findById(123456789L);
         verify(accountRepository, times(1)).save(account);
-        }
+    }
 
-@Test
-@Order(6)
-void deleteAccountTest() {
-        Long accountId = 1L;
+    @Test
+    @Order(4)
+    void deleteAccount() {
+        // Crear un accountId de prueba
+        Long accountId = 123456789L;
 
+        // Simulando el comportamiento de un objeto real
         doNothing().when(accountRepository).deleteById(accountId);
 
+        // Llamando al método que se va a probar
         accountService.deleteAccount(accountId);
 
+        // Verificando que el método deleteById del repositorio fue llamado
         verify(accountRepository, times(1)).deleteById(accountId);
-        }
-
-@Test
-@Order(7)
-void getAccountsByCustomerIdTest() {
+    }
+    @Test
+    @Order(5)
+    void getAccountsByCustomerId() {
+        // Crear un customerId de prueba
         Long customerId = 1L;
+
+        // Crear una lista de cuentas de prueba
         List<Account> accounts = new ArrayList<>();
-        Account account = new Account();
-        account.setId(1L);
-        accounts.add(account);
+        Account account1 = new Account();
+        account1.setIdCuenta(123456789L);
+        account1.setSaldo(new BigDecimal(1000));
+        account1.setFechaApertura(LocalDate.now());
+        account1.setCustomer(null);
+        accounts.add(account1);
 
+        // Crear una lista de AccountDTO de prueba
+        List<AccountDTO> accountDTOs = new ArrayList<>();
+        AccountDTO accountDTO1 = new AccountDTO();
+        accountDTO1.setIdCuenta(123456789L);
+        accountDTO1.setSaldo(new BigDecimal(1000));
+        accountDTO1.setFechaApertura(LocalDate.now());
+        accountDTO1.setCustomer(null);
+        accountDTOs.add(accountDTO1);
+
+        // Simulando el comportamiento de un objeto real
         when(accountRepository.findAccountsByCustomer_IdCliente(customerId)).thenReturn(accounts);
-        when(accountMapper.toDtoList(accounts)).thenReturn(new ArrayList<>());
+        when(accountMapper.toDtoList(accounts)).thenReturn(accountDTOs);
 
+        // Llamando al método que se va a probar
         List<AccountDTO> result = accountService.getAccountsByCustomerId(customerId);
 
+        // Verificando que el método findAccountsByCustomer_IdCliente del repositorio fue llamado
         verify(accountRepository, times(1)).findAccountsByCustomer_IdCliente(customerId);
         verify(accountMapper, times(1)).toDtoList(accounts);
 
-        assertNotNull(result);
-        }*/
+        // Comparando el resultado esperado con el resultado obtenido
+        assertEquals(accountDTOs, result);
+    }
+}
