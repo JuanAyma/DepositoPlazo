@@ -71,7 +71,7 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public List<Account> getAccountsByCustomerId(Long customerId) {
-        List<Account> accounts = restTemplate.getForObject("http://localhost:8080/api/account/customer/" + customerId + "/accounts", List.class);
+        List<Account> accounts = restTemplate.getForObject("http://localhost:9081/api/account/customer/" + customerId + "/accounts", List.class);
         return accounts;
     }
 

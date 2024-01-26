@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.2.2</version>
+	</parent>
+
+	<!-- Cambiar el nombre del proyecto -->
+	<groupId>com.bbva</groupId>
+	<artifactId>Microservicios</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+
+	<name>Microservicios</name>
+	<description>Proyecto padre</description>
+	<packaging>pom</packaging>
+
+	<!--Cambiar la version de java-->
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+	</properties>
+
+	<!-- Microservicios -->
+	<modules>
+		<module>eureka-microservice</module>
+		<module>customer-microservice</module>
+		<module>account-microservice</module>
+		<module>contract-microservice</module>
+		<module>config-server</module>
+		<module>api-gateway</module>
+	</modules>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${org.mapstruct.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.30</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<!-- Cambiar la version de spring boot por la del padre -->
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<version> 3.2.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.1</version>
+					<configuration>
+						<source>1.8</source> <!-- depending on your project -->
+						<target>1.8</target> <!-- depending on your project -->
+						<annotationProcessorPaths>
+							<path>
+								<groupId>org.mapstruct</groupId>
+								<artifactId>mapstruct-processor</artifactId>
+								<version>${org.mapstruct.version}</version>
+							</path>
+							<path>
+								<groupId>org.projectlombok</groupId>
+								<artifactId>lombok</artifactId>
+								<version>1.18.30</version>
+							</path>
+							<!-- other annotation processors -->
+						</annotationProcessorPaths>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
