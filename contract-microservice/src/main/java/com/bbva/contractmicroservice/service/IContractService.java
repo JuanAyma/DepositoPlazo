@@ -10,6 +10,4 @@ public interface IContractService {
     Contract save(ContractDTO contract);
     ContractDTO findById(Long id);
     void deleteById(Long id);
-/////////////////////////////////////////////////////
-    //Contract createContract(ContractDTO contractDTO);
 }

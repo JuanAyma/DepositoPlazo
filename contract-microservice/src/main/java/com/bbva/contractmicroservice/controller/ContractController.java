@@ -22,22 +22,22 @@ public class ContractController {
 
     @GetMapping("/listar-contratos")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> listarContratos() {
+    public ResponseEntity<List<ContractDTO>> listarContratos() {
         List<ContractDTO> contratos = contractService.findAll();
         if (!contratos.isEmpty()) {
             return ResponseEntity.ok(contratos);
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron contratos");
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/ver/{accountId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> getContractById(@PathVariable Long accountId) {
+    public ResponseEntity<ContractDTO> getContractById(@PathVariable Long accountId) {
         ContractDTO contract = contractService.findById(accountId);
         if (contract != null) {
             return ResponseEntity.ok(contract);
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro el contrato");
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/crear")

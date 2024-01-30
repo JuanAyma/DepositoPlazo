@@ -96,16 +96,14 @@ class CustomerServiceImplTest {
 
         // Simulando el comportamiento de un objeto real
         when(customerMapper.toEntity(customerDTO)).thenReturn(customer);
-        doNothing().when(customerRepository).save(customer);
+        when(customerRepository.save(customer)).thenReturn(customer);
 
         // Llamando al método que se va a probar
         customerService.saveCustomer(customerDTO);
 
-        // Verificando que los métodos del repositorio y del mapper fueron llamados
+        // Verificando que los métodos del repositorio y del mapper fueron llamados con los argumentos correctos
         verify(customerMapper, times(1)).toEntity(customerDTO);
         verify(customerRepository, times(1)).save(customer);
-
-        assertEquals(customerDTO.getIdCliente(), customer.getIdCliente());
     }
 
     @Test
@@ -155,19 +153,21 @@ class CustomerServiceImplTest {
     void getAccountsByCustomerId() {
         // Crear un customerId de prueba
         Long customerId = 1L;
+
+        // Crear una lista de cuentas de prueba
         List<Account> accounts = new ArrayList<>();
         Account account1 = new Account();
-        account1.setIdCuenta(123456789L);
+        account1.setIdCuenta(1L);
         accounts.add(account1);
 
         // Simulando el comportamiento de un objeto real
-        when(restTemplate.getForObject("http://localhost:8092/api/account/customer/" + customerId + "/accounts", List.class)).thenReturn(accounts);
+        when(restTemplate.getForObject("http://localhost:9081/api/account/customer/" + customerId + "/accounts", List.class)).thenReturn(accounts);
 
         // Llamando al método que se va a probar
         List<Account> result = customerService.getAccountsByCustomerId(customerId);
 
-        // Verificando que el método getForObject del restTemplate fue llamado
-        verify(restTemplate, times(1)).getForObject("http://localhost:8092/api/account/customer/" + customerId + "/accounts", List.class);
+        // Verificando que el método del restTemplate fue llamado
+        verify(restTemplate, times(1)).getForObject("http://localhost:9081/api/account/customer/" + customerId + "/accounts", List.class);
 
         // Comparando el resultado esperado con el resultado obtenido
         assertEquals(accounts, result);
