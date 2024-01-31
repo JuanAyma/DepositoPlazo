@@ -1,0 +1,43 @@
+# Este flujo de trabajo creará un proyecto Java con Maven y almacenará en caché/restaurará cualquier dependencia para mejorar el tiempo de ejecución del flujo de trabajo.
+# Para obtener más información, consulte: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# Este flujo de trabajo utiliza acciones que no están certificadas por GitHub.
+# Son proporcionados por un tercero y se rigen por
+# términos de servicio, política de privacidad y soporte separados
+# documentación.
+
+#Nombre del flujo de trabajo
+  name: Java CI with Maven
+
+# Este flujo de trabajo se activa en push y pull request events
+  on:
+    push:
+      branches: [ "main" ]
+    pull_request:
+      branches: [ "main" ]
+
+# Un flujo de trabajo contiene una o más tareas llamadas 'jobs'
+# Se ejecutan en paralelo y por defecto, si una de las tareas falla, el flujo de trabajo se considera fallido.
+  jobs:
+    # El flujo de trabajo se compone de dos trabajos: build y test
+    build:
+
+      #runs-on indica el sistema operativo en el que se ejecutará el flujo de trabajo
+      runs-on: ubuntu-latest # windows-latest, macos-latest
+
+      # steps contiene una lista de tareas que se ejecutan en paralelo
+      # Un job tiene uno o más steps
+      steps: #Actions o shell scripts
+        - uses: actions/checkout@v3 # Acción para clonar el repositorio en el runner
+        - name: Set up JDK 17 # Configura el JDK 17 en el runner
+          uses: actions/setup-java@v3 # Acción para configurar el JDK en el runner
+          with: # Parámetros de la acción
+            java-version: '17' # Versión de Java a utilizar
+            distribution: 'temurin' # Distribución de Java a utilizar
+            cache: maven # Caché de Maven a utilizar
+        - name: Build with Maven # Ejecuta el comando de construcción del proyecto con Maven
+          run: mvn -B package --file pom.xml # Comando de construcción del proyecto
+
+        # Opcional: carga el gráfico de dependencia completo en GitHub para mejorar la calidad de las alertas de Dependabot que este repositorio puede recibir.
+        - name: Update dependency graph
+          uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
